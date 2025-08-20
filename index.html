@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #000;
+        }
+
+        .title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 1rem;
+            font-size: clamp(3rem, 10vw, 5rem);
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-unit span {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+
+        .colon {
+            font-size: clamp(3rem, 10vw, 5rem);
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                color: red;
+            }
+        }
+
+        .button {
+            display: none;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .countdown {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title" id="title">Something big is coming...</div>
+    <div class="countdown" id="countdown">
+        <div class="time-unit">
+            <div id="days">00</div>
+            <span>Days</span>
+        </div>
+        <span class="colon">:</span>
+        <div class="time-unit">
+            <div id="hours">00</div>
+            <span>Hours</span>
+        </div>
+        <span class="colon">:</span>
+        <div class="time-unit">
+            <div id="minutes">00</div>
+            <span>Minutes</span>
+        </div>
+        <span class="colon">:</span>
+        <div class="time-unit">
+            <div id="seconds">00</div>
+            <span>Seconds</span>
+        </div>
+    </div>
+    <a href="https://www.youtriedlittlehacker.com" class="button" id="joinButton">Join the shadow</a>
+
+    <script>
+        const endDate = new Date(Date.UTC(2025, 11, 3, 15, 0, 0)); // 
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = endDate - now;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                const countdown = document.getElementById('countdown');
+                const title = document.getElementById('title');
+                countdown.classList.add('blink');
+
+                setTimeout(() => {
+                    countdown.classList.remove('blink');
+                    countdown.style.display = 'none';
+                    title.style.display = 'none';
+                    document.getElementById('joinButton').style.display = 'block';
+                }, 10000);
+
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        const timer = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
